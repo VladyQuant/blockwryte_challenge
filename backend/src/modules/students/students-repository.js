@@ -50,6 +50,17 @@ const addOrUpdateStudent = async (payload) => {
     return rows[0];
 }
 
+const deleteStudent = async (payload) => {
+    const query_user_profiles = "DELETE FROM user_profiles WHERE user_id = $1"
+    const query_users = "DELETE FROM users WHERE id = $1"
+    const queryParams = [payload.userId];
+    
+    await processDBRequest({ query: query_user_profiles, queryParams });
+    const { rowCount } = await processDBRequest({ query: query_users, queryParams });
+    
+    return rowCount;
+}
+
 const findStudentDetail = async (id) => {
     const query = `
         SELECT
@@ -115,6 +126,7 @@ module.exports = {
     getRoleId,
     findAllStudents,
     addOrUpdateStudent,
+    deleteStudent,
     findStudentDetail,
     findStudentToSetStatus,
     findStudentToUpdate
